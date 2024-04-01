@@ -1,5 +1,5 @@
 package com.ontariotechu.sofe3980U;
-
+import java.util.ArrayList;
 /**
  * Unsigned integer Binary variable
  *
@@ -77,6 +77,105 @@ public class Binary
 		}
 		Binary result=new Binary(num3);  // create a binary object with the calculated value.
 		return result;
-		
 	}
+/**
+* Bitwise Logical OR two binary variables
+*
+* @param num1 The first addend object
+* @param num2 The second addend object
+* @return A binary variable with a value of <i>num1 v num2</i>.
+*/
+public static Binary or(Binary num1, Binary num2)
+{
+	int ind1=num1.number.length()-1;
+	int ind2=num2.number.length()-1;
+
+	String num3="";
+	while(ind1>=0 || ind2>=0) // loop until all digits are processed
+	{
+		if (ind1 >= 0 && num1.number.charAt(ind1)=='1' || ind2 >= 0 && num2.number.charAt(ind2)=='1'){
+			num3 = '1' + num3;
+		}
+		else{
+			num3 ='0'+ num3;
+		}
+		ind1--;
+		ind2--;
+	}
+	Binary result=new Binary(num3);
+	return result;
+}
+/**
+* Bitwise Logical AND two binary variables
+*
+* @param num1 The first addend object
+* @param num2 The second addend object
+* @return A binary variable with a value of <i>num1 ^ num2</i>.
+*/
+public static Binary and(Binary num1, Binary num2)
+{
+	int ind1=num1.number.length()-1;
+	int ind2=num2.number.length()-1;
+
+	String num3="";
+	while(ind1>=0 || ind2>=0) // loop until all digits are processed
+	{
+		if (ind1 >= 0 && num1.number.charAt(ind1)=='1' && ind2 >= 0 && num2.number.charAt(ind2)=='1'){
+			num3 = '1' + num3;
+		}
+		else{
+			num3 ='0'+ num3;
+		}
+		ind1--;
+		ind2--;
+	}
+	Binary result=new Binary(num3);
+	return result;
+}
+/**
+* Multiply two binary variables
+*
+* @param num1 The first addend object
+* @param num2 The second addend object
+* @return A binary variable with a value of <i>num1 * num2</i>.
+*/
+public static Binary multiply(Binary num1, Binary num2){
+	int ind1=num1.number.length()-1;
+	int ind2=num2.number.length()-1;
+	ArrayList<String> partials = new ArrayList<>();
+	String num3="";
+
+	while (ind2>=0){
+		StringBuilder partial = new StringBuilder();
+		int carry = 0;
+
+		for (int x=0; ind1-x>=0; x++){
+			char digit1 = num1.number.charAt(ind1-x);
+			char digit2 = num2.number.charAt(ind2);
+			
+			int bit = (digit1 - '0') & (digit2 - '0') + carry;
+			carry = bit /2;
+			int remainder = bit % 2;
+
+			partial.insert(0,remainder);
+		}
+
+		if (carry > 0){
+			partial.insert(0, carry);
+		}
+
+		for (int k=0; k < num2.number.length() - 1 - ind2; k++){
+			partial.append("0");
+		}
+
+		partials.add(partial.toString());
+		ind2--;
+	}
+
+	for (String partial : partials){
+		num3 = add(new Binary(num3), new Binary(partial)).number;
+	}
+	Binary result=new Binary(num3);
+	return result;
+}	
 }	
